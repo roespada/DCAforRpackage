@@ -1,0 +1,10 @@
+Package: DCAforR
+Type: Package
+Title: mfDCA and mfDCAid
+Version: 1.0
+Date: 2014-12-13
+Author: Rocio Espada
+Maintainer: Rocio <roespada@qb.fcen.uba.ar>
+Depends: descr
+Description: Package to work with multiple sequence alignments (in fasta format) and calculate mfDCA and mfDCAid (direct coupling analysis / for repeat proteins)
+License: You can use it and modify it as long as you cite the original work. More information in Espada et al. 2015.
