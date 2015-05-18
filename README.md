@@ -10,7 +10,7 @@ In R type:
 
      library(devtools)
 
-     install_github("roespada/DCAforRpackage")
+     install_github("roespada/DCAforRpackage",subdir="DCAforR")
 
      library(DCAforR)
 
