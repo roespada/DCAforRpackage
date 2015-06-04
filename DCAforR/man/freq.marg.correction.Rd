@@ -5,7 +5,7 @@
   Corrects marginal frequencies of aminoacids in each position (column) of a multiple sequence alignment (MSA).
 }
 \usage{
-  freq.marg.correction(f,Mef,lambda=Mef,naa=NULL)
+  freq.marg.correction(f,Mef,lambda=Mef,naa=21)
 }
 \arguments{
   \item{f}{Matrix with Frequency of residues on each position of the MSA, as the one returned by aa.freq.marg.}
@@ -15,8 +15,6 @@
 }
 \value{
   Matrix with positions at rows, aminoacids at columns and corrected frequencies at values. The correction is made according to \deqn{latex}{f.corrected=((\lambda/naa)+f)/(\lambda+Mef)}
-}
-\references{
 }
 \seealso{
   \code{\link{aa.freq.marg},\link{Henikoff.w}}

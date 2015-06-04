@@ -19,26 +19,29 @@
 \references{
 Morcos, Faruck, et al. "Direct-coupling analysis of residue coevolution captures native contacts across many protein families." Proceedings of the National Academy of Sciences 108.49 (2011): E1293-E1301.
 }
-\seealso{
-  \code{}
-}
 \examples{
   ##Example of MSA
   msa.letters<-rbind(c("G","Y","V","G","S"),c("G","F","D","G","F"),c("G","Y","D","G","F"),c("G","Y","Q","G","G"))
   msa<-msa2num(msa.letters)
-    
-  ##Calculate marginal frequencies, sequences weighted according Henikoff:
-  fm<-aa.freq.marg(msa,weight=Henikoff.w(msa)$w)
-  ## Corrected marginal frequencies
-  fmc<-freq.marg.correction(fm,Mef=Henikoff.w(msa)$mef)
   
-  ##Calculate joint frequencies, sequences weighted according Henikoff:
-  fj<-aa.freq.joint(msa,weight=Henikoff.w(msa)$w)
+  ## Henikoff weights for sequences
+  h.weight<-Henikoff.w(msa,fmarg=aa.freq.marg(msa))
+  
+  ##Calculate marginal frequencies, sequences weighted according to Henikoff:
+  fm<-aa.freq.marg(msa,weight=h.weight$w)
+  ## Corrected marginal frequencies
+  fmc<-freq.marg.correction(fm,Mef=h.weight$mef)
+  
+  ##Calculate joint frequencies, sequences weighted according to Henikoff:
+  fj<-aa.freq.joint(msa,weight=h.weight$w)
   ## Corrected joint frequencies
-  fjc<-freq.joint.correction(fj,Mef=Henikoff.w(msa)$mef)
+  fjc<-freq.joint.correction(fj,Mef=h.weight$mef)
   
   ## Calculate connected-correlation matrix
   Cmatrix<-Cmat(fmc,fjc)
   Cmatrix
 }
-\keyword{}
+\keyword{Connected-correlation matrix}
+\keyword{correlation}
+\keyword{matrix}
+\keyword{frequency}

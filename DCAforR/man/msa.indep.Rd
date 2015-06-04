@@ -22,4 +22,5 @@ Matrix with different sequences (rows) but keeping equal the marginal frequencie
   msa<-msa2num(msa.letters)
   msa.indep(M=msa)
 }
-\keyword{}
+\keyword{msa}
+\keyword{scramble}

@@ -21,17 +21,17 @@ Morcos, F., Pagnani, A., Lunt, B., Bertolino, A., Marks, D. S., Sander, C., ... 
 }
 
 \examples{
-require(DCA)
 
 #Load alignment and prepare the 2-repeats alignment
 # Please notice that a txt file will be saved on the current working directory
-msa<-pfam("PF00023",alignment = "ncbi")
+file<-system.file("PF00023_ncbi.txt", package = "DCAforR")
+msa<-readAlignment(file)
 MSA.n.neighbours(msa = msa,n = 1,outfile = "PF00023_2reps.txt")
 
 
 #DI and DIid calculations - this can take several minutes (10 to 15 min each DI)
 DI<-CompleteDI(msa = "PF00023_2reps.txt",cutoff.gaps = 0.7)
-DIid<-CompleteDIrepeat(msa = "PF00023_2reps.txt",cutoff.gaps = 0.7)
+DIid<-CompleteDIid(msa = "PF00023_2reps.txt",cutoff.gaps = 0.7)
 
 
 #Plot DI and DIid matrix

@@ -17,8 +17,6 @@ aa.freq.marg(M,weight=rep(1,nrow(M)),npos=dim(M)[2],naa=21,colnames.aa=T)
 \value{
  Matrix with positions at rows, aminoacids at columns and frequencies at values.
 }
-\references{
-}
 \seealso{
   \code{\link{Henikoff.w}}
 }

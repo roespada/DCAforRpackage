@@ -2,8 +2,9 @@
 \alias{Spos}
 \title{Entropy per position for a weighted multiple sequence alignment}
 \description{
+Entropy calculation for multiple sequence alignments
 }
-\usage{Spos(freq.marg,npos=nrow(frec.marg))
+\usage{Spos(freq.marg,npos=nrow(freq.marg))
 }
 \arguments{
   \item{freq.marg}{Matrix with frequency normalized of residues on each position of the MSA, as the one returned by freq.marg.correction.}
@@ -27,4 +28,4 @@ Numeric with entropy value for each column of the matrix used for calculate freq
   ##Entropy per position
   Spos(fmc)
 }
-\keyword{}
+\keyword{entropy}

@@ -35,4 +35,4 @@ aa.freq.joint(M,weight=rep(1,nrow(M)),naa=21,npos=dim(M)[2],colnames.aa=T)
   fj[1:10,1:10]
   dim(fj) # 5x21 = 105
 }
-\keyword{}
+\keyword{frequency}

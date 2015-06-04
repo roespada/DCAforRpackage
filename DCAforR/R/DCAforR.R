@@ -1,6 +1,6 @@
-#·····························································································#
+###############################################################################################
 # General functions
-#·····························································································#
+###############################################################################################
 
 #Load Alignment
 #file: name of the fasta with the MSA
@@ -25,6 +25,7 @@ readAlignment<-function(file){
     
     msa[i,]<-complete.seq.protein
   }
+    rownames(msa)<-sub(pattern=">",replacement = "",lineas[lineas.nombres])
   
   return(msa)
 }
@@ -37,7 +38,7 @@ msa2num<-function(msa){
   msa<-toupper(msa)
   if(any(! msa%in%aminoac)){
     pos<-which(! msa%in%aminoac)
-    cat("WARNING: ",length(pos)," Positions had unidentified residues (",unique(msa[pos]),")\n \t All were set as gap")
+    warning(length(pos)," Positions had unidentified residues (",unique(msa[pos]),")\n \t All were set as gap")
     msa[pos]<-"-"
     
   }
@@ -116,9 +117,9 @@ msa.removed.gaps<-function(msa,cutoff.gaps=0.7,aa2rm="-"){
 }
 
 
-#·····························································································#
+###############################################################################################
 # Calculation of frequencies
-#·····························································································#
+###############################################################################################
 ##  Marginal frequencies of amino acid in each position     NEEDS DESCR PACKAGE Y TIENE ALGO MEDIO RARO CON LOS AA...
 #M: multiple sequence alignment - as integer matrix
 #weights: vector of weights assigned to each sequence
@@ -155,7 +156,7 @@ aa.freq.joint<-function(M,weight=rep(1,nrow(M)),naa=21,npos=dim(M)[2],colnames.a
   # Verification:
   if(nrow(M)!=length(weight)) stop("Different number of sequences and weights!")
   
-  #     #Definiciones básicas del alineamiento
+  #     #Definiciones basicas del alineamiento
   #     if(is.null(npos)){npos<-dim(M)[2]
   #                       warning("npos set as dim(M)[2]")}
   #     if(is.null(naa)){naa<-length(unique(c(M)))
@@ -214,7 +215,7 @@ freq.joint.correction<-function(f,Mef,naa=21,npos=ncol(f)/naa,lambda=Mef){
   return(out)
 }
 
-## C matrix: fij-fi·fj 
+## C matrix: fij-fi fj 
 #fmar: corrected marginal frequencies (matrix)
 #fconj: corrected joint frequencies (matrix)
 Cmat<-function(fmar,fjoint){
@@ -227,9 +228,9 @@ Cmat<-function(fmar,fjoint){
 
 
 
-#·····························································································#
+###############################################################################################
 # Calculation of DI and MI
-#·····························································································#
+###############################################################################################
 ## Entropy per position
 #freq.marg: marginal frequency
 #weights: weights used for each sequence
@@ -254,7 +255,7 @@ msa.indep<-function(M){
 
 ## Invertir la matriz C y balancearla. Devuelve: inversa de C, diagonal de la inversa de C, Cinv balanceada
 #C matriz a invertir
-#out.aa: aminoacido que no uso en la inversión (aunque luego lo agrego como ceros en la matrix final)
+#out.aa: aminoacido que no uso en la inversion (aunque luego lo agrego como ceros en la matrix final)
 coupling.fields<-function(C,out.aa="-",naa=21,npos=ncol(C)/naa){
   
   if(is.character(out.aa)){out.aa<-msa2num(out.aa)}
@@ -377,19 +378,19 @@ DIfunc<-function(fmarg,K,naa=21,npos=nrow(fmarg)){
 }
 
 
-#·····························································································#
+###############################################################################################
 # Functions for repeat proteins
-#·····························································································#
+###############################################################################################
 
 # Armar alineamientos de vecinos n-esimos
 
-#Funcion para armar alineamiento a n vecinos con datos bajados de PFAM/NCBI (n=1:: primeros vecinos, n=2:: segundos veinos, etc)
+#Funcion para armar alineamiento a n vecinos con datos bajados de PFAM/NCBI (n=1 primeros vecinos, n=2 segundos veinos, etc)
 #maxdist=ncol(msa)*(n*1.5-1) Maxima cantidad de aminoacidos en el medio permitidas como inserciones.
 #        el default es la cantidad de repeats en el medio + medio repeat por cada union de repeats: [ n-1 + n ] * ncol(msa)
-MSA.n.neighbours<-function(msa,n=2,outfile=paste("MSA_neighb_",n,".fasta",sep=""),maxdist=ncol(msa$ali)*(n*1.5-1),mindist=ncol(msa$ali)*(n-1)){
+MSA.n.neighbours<-function(msa,n=2,outfile=paste("MSA_neighb_",n,".fasta",sep=""),maxdist=ncol(msa)*(n*1.5-1),mindist=ncol(msa)*(n-1)){
   
   #ids de los repeats en matriz nombrePROT/inicioREP/finalREP
-  nom<-msa$id
+  nom<-rownames(msa)
   nom<-matrix(unlist(sapply(sapply(nom,strsplit,"/"),strsplit,"-")),ncol=3,byrow=T)
   
   ##### Busco los repeats que esten separados por n repeats  #######
@@ -411,7 +412,10 @@ MSA.n.neighbours<-function(msa,n=2,outfile=paste("MSA_neighb_",n,".fasta",sep=""
       #sino uno los dos repeats y lo agrego al alineamiento en el outfile
       r1<-paste(nom.sub[j,1],"/",nom.sub[j,2],"-",nom.sub[j,3],sep="")
       r2<-paste(nom.sub[j+n,1],"/",nom.sub[j+n,2],"-",nom.sub[j+n,3],sep="")
-      write.fasta(ids=paste(r1,"·",r2,sep=""),seqs=c(msa$ali[r1,],msa$ali[r2,]),file=outfile,append=T)
+      
+      cat(paste(">",r1,"-",r2,"\n",sep=""),file=outfile,append=T)
+      cat(paste(c(msa[r1,],msa[r2,]),collapse = ""),file=outfile,append=T)
+      cat("\n",file=outfile,append=T)
     }    
   }
   return(0)
@@ -462,9 +466,9 @@ weight.idREP<-function(msa.real){
 
 
 
-#·····························································································#
+###############################################################################################
 # Functions for complete DI calculations
-#·····························································································#
+###############################################################################################
 
 CompleteDI<-function(msa,cutoff.gaps=0.7){
   msa <- readAlignment(msa)
